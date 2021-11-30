@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Заказать маршрутку</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+	<header>
+		<a href="#">Главная</a>
+	</header>
+	<section id="search">
+		<form class="search_form" action="/" method="post">
+			<div class="column">
+				<label>Откуда:</label>
+				<select name="start">
+					<option value="1" selected>Бобруйск</option>
+					<option value="2">Минск</option>
+				</select>
+			</div>
+			<div class="column">
+				<label>Куда:</label>
+				<select name="end">
+					<option value="1">Бобруйск</option>
+					<option value="2" selected>Минск</option>
+				</select>
+			</div>
+			<div class="column">
+				<label>Дата:</label>
+				<input type="date" name="date" required>
+			</div>
+			<div class="column btn">
+				<input type="submit" value="Поиск маршрута">
+			</div>
+		</form>
+	</section>
+	<section id="results">
+		<div class="results-items"></div>
+	</section>
+
+<script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready( function() {
+	var d = new Date();
+	var month = d.getMonth()+1;
+	var day = d.getDate();
+	var output = d.getFullYear()+'-'+(month<10 ?'0':'')+month+'-'+(day<10?'0':'')+day;
+
+    $('input[type="date"]').val(output);
+});
+$(".search_form").on("submit", function(e){
+	e.preventDefault();
+	$.ajax({
+		url: '/check.php',
+		method: 'get',
+		data: $(this).serialize(),
+		success: function(data){
+			$(".results-items").html(data);
+		}
+	});
+});
+</script>
+
+
+</body>
+</html>
