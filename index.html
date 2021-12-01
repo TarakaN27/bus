@@ -22,7 +22,6 @@
 			<div class="column">
 				<label>Куда:</label>
 				<select name="end">
-					<option value="1">Бобруйск</option>
 					<option value="2" selected>Минск</option>
 				</select>
 			</div>
@@ -36,7 +35,7 @@
 		</form>
 	</section>
 	<section id="results">
-		<div class="results-items"></div>
+		<div class="results-items"><span style="color:#fff; text-align:center;">Выберите параметры...</span></div>
 	</section>
 
 <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
@@ -48,9 +47,29 @@ $(document).ready( function() {
 	var output = d.getFullYear()+'-'+(month<10 ?'0':'')+month+'-'+(day<10?'0':'')+day;
 
     $('input[type="date"]').val(output);
+
+    $('select').change(function(){
+    	var start = $("select[name='start']").val();
+    	if(start == 1) {
+    		$("select[name='end'] option[value='1']").remove();
+    		$("select[name='end']").append($('<option>', {
+			    value: 2,
+			    text: 'Минск'
+			}))
+    	}
+    	if(start == 2) {
+    		$("select[name='end'] option[value='2']").remove();
+    		$("select[name='end']").append($('<option>', {
+			    value: 1,
+			    text: 'Бобруйск'
+			}))
+    	}
+    });
+
 });
 $(".search_form").on("submit", function(e){
 	e.preventDefault();
+	$(".results-items").html("<span style='color:#fff; text-align:center;'>Сбор информации...</span>");
 	$.ajax({
 		url: '/check.php',
 		method: 'get',

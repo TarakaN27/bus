@@ -168,6 +168,6 @@ section {
 		margin-top: 10px;
 	}
 	#results .results-item {
-		justify-content: space-around;
+		justify-content: space-between;
 	}
 }
