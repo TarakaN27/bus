@@ -190,6 +190,7 @@
 				$get_search = $db->query("SELECT * FROM `race` WHERE `company`='".$race["company"]."' AND `date`='".$race["date_reis"]."' AND `time`='".$race["time_reis"]."' AND `fromcity`='".$fromcity."' AND `tocity`='".$tocity."'");
 				if ($get_search->num_rows == 0) {
 					$query = $db->query("INSERT INTO `race` (`company`, `date`,`time`,`fromcity`,`tocity`) VALUES ('".$race["company"]."','".$race["date_reis"]."','".$race["time_reis"]."','".$fromcity."','".$tocity."')");
+					$race["race"] = $get_city_array[$fromcity-1]."-".$get_city_array[$tocity-1];
 					$profit_race[] = $race;
 				}
 			}
@@ -198,18 +199,24 @@
 
 	if(count($profit_race) >= 1){
 		foreach($profit_race as $race) {
-
-		}
-		define('SLACK_WEBHOOK', 'https://hooks.slack.com/services/xxx/yyy/zzz');
-		function slack($txt) {
-		  $msg = array('text' => $txt);
-		  $c = curl_init(SLACK_WEBHOOK);
-		  curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
-		  curl_setopt($c, CURLOPT_SSL_VERIFYPEER, false);
-		  curl_setopt($c, CURLOPT_POST, true);
-		  curl_setopt($c, CURLOPT_POSTFIELDS, array('payload' => json_encode($msg)));
-		  curl_exec($c);
-		  curl_close($c);
+			$message = $race["race"]." ".$race["company"]." ".$race["date_reis"]." ".$race["time_reis"];
+			$ch = curl_init();
+			$vars = json_encode([
+					"channel" => 'C02Q8QUU6E4',
+					"text" => $message,
+				]);
+			curl_setopt($ch, CURLOPT_URL,"https://slack.com/api/chat.postMessage");
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS,$vars);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			$headers = [
+				"Authorization: Bearer xoxb-2801156916867-2794429722806-fGlkGetJO8ddg0DqcO1dA9jH",
+				"Content-type: application/json; charset=utf-8"
+			];
+			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+			$server_output = curl_exec ($ch);
+			var_dump($server_output);
+			curl_close ($ch);
 		}
 	}
 	
