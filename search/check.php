@@ -72,7 +72,7 @@
 			foreach($result->find('div.MuiContainer-root div.jss5') as $element){
 				$item['date_reis']     = $this->date;
        			$item['time_reis']     = $element->find("div.MuiGrid-container",0)->find("div.MuiGrid-grid-md-3", 0)->children(0)->children(0)->children(0)->plaintext;
-       			$item['place_reis']     = substr(strval($element->find("div.MuiGrid-container",0)->find("button",0)->find("div.MuiBox-root", 1)->plaintext), 17, 2);
+       			$item['place_reis']     = $element->find("div.MuiGrid-container",0)->find("button",0)->find("div.MuiBox-root", 1)->plaintext;
 			    $articles[] = $item;
 			}
 			return $articles;
@@ -199,7 +199,7 @@
 
 	if(count($profit_race) >= 1){
 		foreach($profit_race as $race) {
-			$message = $race["race"]." ".$race["company"]." ".$race["date_reis"]." ".$race["time_reis"];
+			$message = $race["race"]." ".$race["company"]." ".$race["date_reis"]." ".$race["time_reis"]." ".$race["place_reis"];
 			$ch = curl_init();
 			$vars = json_encode([
 					"channel" => 'C02Q8QUU6E4',
@@ -210,7 +210,7 @@
 			curl_setopt($ch, CURLOPT_POSTFIELDS,$vars);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$headers = [
-				"Authorization: Bearer xoxb-2801156916867-2794429722806-fGlkGetJO8ddg0DqcO1dA9jH",
+				"Authorization: Bearer ",
 				"Content-type: application/json; charset=utf-8"
 			];
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -221,3 +221,4 @@
 	}
 	
 ?>
+
